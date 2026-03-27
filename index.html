@@ -4,167 +4,144 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gerador de Etiquetas Hospitalares</title>
+  <title>Gerador de Etiquetas Inteligente</title>
 
-  <!-- Importando fonte corporativa e moderna -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    /* Variáveis de estilo flexíveis */
+    /* Variáveis de Cores (Paleta Hospitalar Moderna) */
     :root {
-      --bg-color: #f0f4f8;
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --secondary: #10b981;
-      --secondary-hover: #059669;
-      --text: #1f2937;
-      --text-light: #6b7280;
-      --border: #e5e7eb;
+      --bg-color: #f0f8ff; /* Azul claro suave para o fundo da página */
+      --navy: #1e3a8a; /* Azul-marinho elegante para títulos */
+      --text-gray: #4b5563; /* Azul-acinzentado para instruções */
+      --cobalt: #2563eb; /* Azul cobalto para botões principais ativos */
+      --cobalt-hover: #1d4ed8;
+      --light-blue: #e0f2fe; /* Azul claro suave para botões inativos/secundários */
+      --light-blue-text: #0369a1;
+      --success: #10b981; /* Verde do botão sincronizar */
+      --danger: #ef4444; /* Vermelho para alertas/remoções */
       --card-bg: #ffffff;
 
-      /* Variáveis injetadas pelo Configuração do usuário */
-      --label-width: 240px;
-      --label-height: 150px;
+      /* Variáveis da Etiqueta Física injetadas pelo Configuração do usuário */
+      --label-width: 65mm;
+      --label-height: 30mm;
       --grid-cols: 3;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       background: var(--bg-color);
-      color: var(--text);
-      margin: 0;
-      padding: 30px;
-      transition: all 0.3s ease;
-    }
-
-    h1 {
-      color: var(--primary);
-      text-align: center;
-      font-weight: 800;
-      margin-bottom: 30px;
-      letter-spacing: -0.5px;
-    }
-
-    /* Abas */
-    .tabs {
+      color: var(--navy);
+      padding: 0;
+      min-height: 100vh;
       display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 30px;
-      flex-wrap: wrap;
+      flex-direction: column;
     }
 
-    .tab-btn {
-      padding: 12px 24px;
-      border: none;
-      background: var(--card-bg);
-      cursor: pointer;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 15px;
-      color: var(--text-light);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-      transition: all 0.2s ease;
-    }
-
-    .tab-btn.active {
-      background: var(--primary);
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-    }
-
-    .tab-btn:hover:not(.active) {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      color: var(--text);
-    }
-
-    /* Conteúdo das Abas */
-    .tab-content {
-      display: none;
-      max-width: 800px;
-      margin: 0 auto;
-      background: var(--card-bg);
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-      animation: fadeIn 0.3s ease-out forwards;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .tab-content.active {
+    .no-print {
       display: block;
     }
 
-    h3 {
-      margin-top: 0;
-      color: var(--text);
-      font-size: 1.5rem;
+    /* HEADER */
+    header {
+      text-align: center;
+      padding: 30px 20px 20px 20px;
     }
 
-    p {
-      line-height: 1.6;
-      color: var(--text-light);
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--navy);
     }
 
-    /* Inputs de Texto */
-    textarea {
+    /* DASHBOARD LAYOUT (3 Colunas) */
+    .dashboard-container {
+      display: grid;
+      grid-template-columns: minmax(320px, 1fr) minmax(350px, 1fr) minmax(380px, 1.2fr);
+      gap: 24px;
       width: 100%;
-      height: 220px;
-      padding: 16px;
-      font-family: ui-monospace, 'Cascadia Code', monospace;
-      font-size: 14px;
-      border: 2px solid var(--border);
-      border-radius: 12px;
-      box-sizing: border-box;
-      transition: border-color 0.2s;
-      resize: vertical;
-      outline: none;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 30px 40px 30px;
+      flex: 1; /* Empurra o footer */
+    }
+
+    @media (max-width: 1100px) {
+      .dashboard-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* PAINÉIS (Cards) */
+    .panel {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 25px rgba(30, 58, 138, 0.06);
+      border: 1px solid rgba(255,255,255, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .panel h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 5px;
+    }
+
+    .panel p {
+      color: var(--text-gray);
+      font-size: 0.95rem;
       line-height: 1.5;
     }
 
-    textarea:focus {
-      border-color: var(--primary);
-    }
-
+    /* Formulários e Inputs */
     .form-group {
-      margin-bottom: 20px;
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
 
     label {
+      font-size: 0.85rem;
       font-weight: 600;
-      color: var(--text);
-      font-size: 14px;
+      color: var(--navy);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
-    input[type="number"] {
-      width: 120px;
-      padding: 12px;
-      border: 2px solid var(--border);
-      border-radius: 8px;
-      font-size: 16px;
+    input[type="url"], input[type="text"], input[type="number"], textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
       outline: none;
-      transition: border-color 0.2s;
+      transition: all 0.2s;
+      background: #f9fafb;
     }
 
-    input[type="number"]:focus {
-      border-color: var(--primary);
+    input:focus, textarea:focus {
+      border-color: var(--cobalt);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
     }
 
     /* Botões */
@@ -172,51 +149,153 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 12px 24px;
-      background: var(--secondary);
-      color: #fff;
+      padding: 12px 20px;
       border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
+      border-radius: 9999px; /* Formato oval pedido */
+      font-size: 0.95rem;
       font-weight: 600;
+      cursor: pointer;
       transition: all 0.2s ease;
-      margin-top: 10px;
-      box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
+      white-space: nowrap;
     }
 
     .btn:hover {
-      background: var(--secondary-hover);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .btn:active {
+      transform: translateY(0);
     }
 
-    .btn:active {
-      transform: translateY(1px);
+    .btn-sync {
+      background: var(--success);
+      color: white;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      width: 100%;
     }
+
+    .btn-sync:hover { background: #059669; }
+
+    .btn-cobalt {
+      background: var(--cobalt);
+      color: white;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-cobalt:hover { background: var(--cobalt-hover); }
+
+    .btn-light {
+      background: var(--light-blue);
+      color: var(--light-blue-text);
+      border: 1px solid #bae6fd;
+    }
+
+    .btn-light:hover { background: #bae6fd; }
 
     .btn-print {
       background: #f59e0b;
+      color: white;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+      font-size: 1rem;
+      padding: 14px 20px;
       width: 100%;
-      font-size: 18px;
-      padding: 16px;
-      box-shadow: 0 4px 6px rgba(245, 158, 11, 0.2);
     }
 
-    .btn-print:hover {
-      background: #d97706;
-      box-shadow: 0 6px 12px rgba(245, 158, 11, 0.3);
+    .btn-print:hover { background: #d97706; }
+
+    /* TABELA DE ETIQUETAS */
+    .table-container {
+      overflow-y: auto;
+      max-height: 400px;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      background: #fff;
     }
 
-    /* Área de Impressão */
-    #label-container {
-      display: grid;
-      grid-template-columns: repeat(var(--grid-cols), var(--label-width));
-      gap: 15px;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    thead {
+      background: #f9fafb;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    th {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      padding: 14px 16px;
+      color: var(--text-gray);
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #f3f4f6;
+      font-size: 0.9rem;
+      color: var(--navy);
+      font-weight: 500;
+    }
+
+    tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    /* Pequenos ícones para Ações nas linhas */
+    .action-icons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      background: var(--light-blue);
+      color: var(--light-blue-text);
+      border: none;
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover {
+      background: #bae6fd;
+    }
+
+    .icon-btn.remove {
+      background: #fee2e2;
+      color: #ef4444;
+    }
+
+    .icon-btn.remove:hover {
+      background: #fecaca;
+    }
+
+    /* MÓDULO DE PRÉ-VISUALIZAÇÃO / ETIQUETA REAL */
+    .preview-area {
+      flex: 1;
+      display: flex;
+      align-items: center;
       justify-content: center;
-      margin-top: 40px;
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 20px;
+      min-height: 180px;
     }
 
+    /* Container de Impressão (Fiel) */
+    #print-zone {
+      display: none; /* Só aparece no print */
+    }
+
+    /* A Classe Universal da Etiqueta Física */
     .label-box {
       width: var(--label-width);
       height: var(--label-height);
@@ -229,8 +308,15 @@
       padding: 2mm;
       box-sizing: border-box;
       overflow: hidden;
-      border-radius: 8px;
-      /* Somente no PC arredondado */
+      border-radius: 8px; /* Arredondado só na tela */
+      margin: 0;
+    }
+
+    /* Na coluna central, criamos um invólucro para centrar sem afetar o width */
+    .preview-box-wrapper .label-box {
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      transform: scale(1.1); /* Zoom leve só no preview */
+      transform-origin: center;
     }
 
     .label-box img {
@@ -258,6 +344,7 @@
       font-weight: 800;
       font-size: min(var(--font-code, 1.15rem), 14cqi);
       margin-bottom: 1mm;
+      color: #000; /* Preto forte para impressão */
       letter-spacing: 0.5px;
       line-height: 1.1;
       white-space: nowrap;
@@ -270,6 +357,7 @@
       font-size: var(--font-prod, 0.85rem);
       line-height: 1.1;
       font-weight: 600;
+      color: #000;
       display: -webkit-box;
       -webkit-line-clamp: 5;
       -webkit-box-orient: vertical;
@@ -278,37 +366,61 @@
       text-transform: uppercase;
     }
 
-    /* Estado de erro / Código não encontrado */
     .label-box.not-found {
       color: #ef4444;
       outline: 3px dashed #ef4444;
       background: #fef2f2;
     }
 
-    /* MEDIA QUERIES PARA IMPRESSAO FÍSICA A4 */
+    .label-box.not-found .code, .label-box.not-found .product {
+      color: #ef4444;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 20px;
+      border-top: 1px solid #e5e7eb;
+      margin-top: 20px;
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: var(--light-blue-text);
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    footer a:hover {
+      color: var(--cobalt);
+    }
+
+    /* MEDIA QUERIES APENAS PARA A FÍSICA */
     @media print {
       body {
-        padding: 0;
         background: #fff;
-        margin: 0;
       }
-
       .no-print {
         display: none !important;
       }
 
-      #label-container {
-        margin-top: 0;
-        gap: 1mm;
-        /* Espaçamento de 1mm para facilitar o corte na impressão */
+      #print-zone {
+        display: grid;
+        grid-template-columns: repeat(var(--grid-cols), var(--label-width));
+        gap: 1mm; /* 1 milímetro para corte perfeito conforme solicitado anteriormente */
         justify-content: start;
+        align-content: start;
+        margin: 0;
+        padding: 0;
       }
 
       .label-box {
-        border: 1px solid #000;
-        border-radius: 0;
-        box-sizing: border-box;
+        border-radius: 0; /* Etiquetas físicas quadradas */
         page-break-inside: avoid;
+        box-shadow: none !important;
+        transform: scale(1) !important;
       }
 
       @page {
@@ -320,172 +432,241 @@
 
 <body>
 
-  <!-- Interface Gráfica -->
-  <div class="no-print">
+  <!-- Módulo Gráfico da Aplicação -->
+  <header class="no-print">
     <h1>Gerador de Etiquetas Inteligente</h1>
+  </header>
 
-    <div class="tabs">
-      <button class="tab-btn active" onclick="openTab('tab-db')">1. Banco de Dados</button>
-      <button class="tab-btn" onclick="openTab('tab-sel')">2. Seleção</button>
-      <button class="tab-btn" onclick="openTab('tab-cfg')">3. Configuração</button>
-      <button class="tab-btn" onclick="openTab('tab-preview'); generateLabels();">4. Visualizar & Imprimir</button>
-    </div>
+  <div class="dashboard-container no-print">
 
-    <!-- DB TAB -->
-    <div id="tab-db" class="tab-content active">
-      <h3>Banco de Dados de Produtos (Ligação Direta)</h3>
-      <p>Cole abaixo o Link de Compartilhamento da sua planilha original. (Clique em Compartilhar > <b>"Qualquer pessoa com o link pode ler"</b> > Copiar Link).</p>
-      <div class="form-group">
-        <label>Link de Compartilhamento do Google Sheets</label>
-        <input type="url" id="db-input" placeholder="https://docs.google.com/spreadsheets/d/1LhOrAMHTciuV.../edit" style="width:100%; padding:14px; border:2px solid var(--border); border-radius:8px; font-size:14px; outline:none;">
+    <!-- COLUNA 1: DADOS & CONFIGURAÇÕES -->
+    <div class="panel col-left">
+      <div>
+        <h2>1. Fonte de Dados (Direta)</h2>
+        <p>Cole o Link de Compartilhamento do Google Sheets. A ferramenta memoriza no cache.</p>
       </div>
-      <button class="btn" onclick="saveDB()">🔄 Sincronizar Agora</button>
-      <span id="db-msg" style="color:var(--secondary); font-weight:600; margin-left:15px;"></span>
-      <p style="font-size:14px; font-weight:600; margin-top:20px;" id="db-status"></p>
-    </div>
 
-    <!-- SELECTION TAB -->
-    <div id="tab-sel" class="tab-content">
-      <h3>Códigos para Imprimir</h3>
-      <p>Digite, bipe (com leitor de código de barras) ou cole todos os códigos dos produtos que deseja emitir em
-        etiquetas. Colocar <b>um código por linha</b>.</p>
-      <textarea id="sel-input" placeholder="1001&#10;1002&#10;1001"></textarea>
-      <button class="btn" onclick="saveSel()">💾 Salvar Códigos</button>
-      <span id="sel-msg" style="color:var(--secondary); font-weight:600; margin-left:15px;"></span>
-    </div>
-
-    <!-- CONFIG TAB -->
-    <div id="tab-cfg" class="tab-content">
-      <h3>Layout e Papel de Impressão</h3>
       <div class="form-group">
-        <label>Largura Fixa da Etiqueta (mm)</label>
-        <input type="number" step="1" id="cfg-w" value="65">
-      </div>
-      <div class="form-group">
-        <label>Altura Fixa da Etiqueta (mm)</label>
-        <input type="number" step="1" id="cfg-h" value="30">
-      </div>
-      <div class="form-group">
-        <label>Quantidade de Etiquetas na Linha (Colunas)</label>
-        <input type="number" id="cfg-cols" value="3">
+        <label>Link do Google Sheets Público</label>
+        <input type="url" id="db-input" placeholder="https://docs.google.com/spreadsheets/d/1LhOrA...">
       </div>
       
-      <!-- Google Forms Automático via QR Code escondido na aba 3 porque já lemos da 3a coluna automaticamente -->
+      <button class="btn btn-sync" onclick="saveDB()">Sincronizar Planilha</button>
+      
+      <!-- Informações de Sistema -->
+      <div style="background:#f8fafc; padding:12px; border-radius:8px; border:1px solid #e2e8f0; min-height:48px; display:flex; align-items:center; justify-content:center;">
+        <p id="db-status" style="margin:0; font-weight:600; text-align:center; font-size:0.9rem;">Pronto para sincronizar.</p>
+      </div>
 
-      <button class="btn" onclick="saveCfg()">⚙️ Aplicar e Salvar Ajustes</button>
-      <span id="cfg-msg" style="color:var(--secondary); font-weight:600; margin-left:15px;"></span>
+      <hr style="border:0; border-top:1px dashed #cbd5e1; margin: 5px 0;">
+
+      <div>
+        <h2>2. Ajustes Visuais (Papel)</h2>
+        <p>Defina as dimensões e número de colunas da etiqueta real.</p>
+      </div>
+      
+      <div style="display: flex; gap:10px;">
+        <div class="form-group" style="flex:1;">
+          <label>Larg. (mm)</label>
+          <input type="number" step="1" id="cfg-w" value="65" onchange="applyCSSVars()">
+        </div>
+        <div class="form-group" style="flex:1;">
+          <label>Alt. (mm)</label>
+          <input type="number" step="1" id="cfg-h" value="30" onchange="applyCSSVars()">
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Quantidade de colunas na folha</label>
+        <input type="number" id="cfg-cols" value="3" onchange="applyCSSVars()">
+      </div>
     </div>
 
-    <!-- PREVIEW TAB -->
-    <div id="tab-preview" class="tab-content">
-      <h3>Visualizar Grade de Impressão</h3>
-      <p>Abaixo está o preview fiel do recorte das etiquetas baseado em sua configuração. Ajuste caso o corte caia sobre
-        algum texto na configuração e depois clique no botão abaixo.</p>
-      <button class="btn btn-print" onclick="window.print()">🖨️ IMPRIMIR ETIQUETAS (Ctrl + P)</button>
+    <!-- COLUNA 2: PRÉ-VISUALIZAÇÃO (Antes era 3a coluna no plano, mas central faz mais sentido) -->
+    <div class="panel col-center" style="display: flex; flex-direction: column;">
+      <div>
+        <h2>Pré-visualização da Etiqueta</h2>
+        <p>Veja aqui a versão ampliada (modelo real) da etiqueta. O QR Code te direcionará para o link de cadastro.</p>
+      </div>
+
+      <div class="preview-area">
+        <!-- Renderização da Etiqueta "em foco" (Preview da UI) -->
+        <div class="preview-box-wrapper" id="single-preview-container">
+           <div style="color:#94a3b8; font-size:0.9rem; text-align:center;">
+             👀 Clique em "Visualizar" na tabela<br>para espiar a etiqueta final.
+           </div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:10px; margin-top: 15px;">
+        <button class="btn btn-light" onclick="javascript:document.getElementById('cfg-w').focus();">⚙️ Configurar Layout Físico</button>
+        <button class="btn btn-print" onclick="triggerPrint()">🖨️ Visualizar PDF & Imprimir</button>
+      </div>
     </div>
+
+
+    <!-- COLUNA 3: GESTÃO DA FILA (TABELA) -->
+    <div class="panel col-right">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h2 style="margin:0;">Fila de Etiquetas Geradas</h2>
+        <span style="font-size:0.75rem; background: var(--light-blue); color: var(--navy); padding:4px 10px; border-radius:12px; font-weight:800;" id="count-badge">0</span>
+      </div>
+      <p>Gerencie as etiquetas. Adicione bipando com leitor.</p>
+
+      <div style="display: flex; gap: 10px; margin-bottom: 5px;">
+           <input type="text" id="add-code-input" placeholder="ID/Cód. (Bipe ou cole)" style="flex:1;">
+           <button class="btn btn-cobalt" style="font-size: 0.85rem;" onclick="addSingleCode()">+ Gerar Etiqueta</button>
+      </div>
+
+      <!-- Tabela -->
+      <div class="table-container">
+        <table id="labels-table">
+          <thead>
+            <tr>
+              <th style="width: 25%">CÓD.</th>
+              <th style="width: 45%;">PRODUTO</th>
+              <th style="width: 30%;">OPÇÕES</th>
+            </tr>
+          </thead>
+          <tbody id="labels-tbody">
+            <!-- As linhas vão aqui via JS -->
+          </tbody>
+        </table>
+      </div>
+      
+      <button class="btn btn-light" style="width:100%; border:1px dashed #cbd5e1; color:#ef4444;" onclick="clearQueue()">Remover Todas</button>
+      
+    </div>
+
   </div>
 
-  <!-- Container da Grade Visível Constantemente Pós Geração -->
-  <div id="label-container" class="no-print"></div>
+  <footer class="no-print">
+    <a href="#">Sobre o Sistema</a> • <a href="#">Suporte e Ajuda</a> • <a href="#">Avisos de Privacidade</a>
+  </footer>
 
-  <!-- Lógica em Javascript Local -->
+  <!-- CAMADA DE IMPRESSÃO - NÃO RENDERIZADA NA TELA -->
+  <div id="print-zone"></div>
+
+  <!-- Lógica Avançada Client-Side -->
   <script>
-    // Hooks no DOM
+    // Memória Global (O Banco Puxado do Sheets)
+    let globalDB = {};
+    // Fila Operacional (IDs Atualmente Adicionados na Tela e prontos para o @media print)
+    let printQueue = [];
+
+    // Constantes e Hooks
     const elDbInput = document.getElementById('db-input');
-    const elSelInput = document.getElementById('sel-input');
     const elCfgW = document.getElementById('cfg-w');
     const elCfgH = document.getElementById('cfg-h');
     const elCfgCols = document.getElementById('cfg-cols');
-    const container = document.getElementById('label-container');
     const dbStatus = document.getElementById('db-status');
+    const tableBody = document.getElementById('labels-tbody');
+    const codeInput = document.getElementById('add-code-input');
+    const previewContainer = document.getElementById('single-preview-container');
+    const printZone = document.getElementById('print-zone');
+    const countBadge = document.getElementById('count-badge');
 
     // Inicialização
     window.onload = () => {
-      elDbInput.value = localStorage.getItem('etiquetas_db_url') || '';
-      elSelInput.value = localStorage.getItem('etiquetas_sel') || '';
+      // Setup Configs Salvas
       if (localStorage.getItem('etiquetas_cfg_w')) elCfgW.value = localStorage.getItem('etiquetas_cfg_w');
       if (localStorage.getItem('etiquetas_cfg_h')) elCfgH.value = localStorage.getItem('etiquetas_cfg_h');
       if (localStorage.getItem('etiquetas_cfg_cols')) elCfgCols.value = localStorage.getItem('etiquetas_cfg_cols');
       applyCSSVars();
-      
-      // Se houver um link de base de dados já preenchido e cache, ele avisa
-      if(localStorage.getItem('etiquetas_db_json')){
-         dbStatus.style.color = 'var(--secondary)';
-         dbStatus.innerText = '✅ Banco de Dados Mestre disponível nativamente.';
+
+      // Carregar os Códigos Em Fila
+      const queueSave = localStorage.getItem('etiquetas_fila');
+      if (queueSave) {
+          try { printQueue = JSON.parse(queueSave); } catch(e){}
       }
-      if(elDbInput.value.trim().length > 10) saveDB(); // atualiza em background
+
+      // Verificação de Banco Local
+      const jsonStr = localStorage.getItem('etiquetas_db_json');
+      if(jsonStr) {
+          try {
+             globalDB = JSON.parse(jsonStr);
+             dbStatus.style.color = '#059669'; 
+             dbStatus.innerText = `✅ Banco pré-carregado (${Object.keys(globalDB).length} produtos).`;
+          } catch(e) {}
+      }
+
+      const savedLink = localStorage.getItem('etiquetas_db_url');
+      if(savedLink) { elDbInput.value = savedLink; }
+
+      // Suporte Rápido do Scanner (Leitor envia enter dinâmico)
+      codeInput.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          let raw = codeInput.value;
+          // Split multiple inputs in case user pasted chunk of lines
+          let parts = raw.split(/[\\n\\t,;]+|\\s{2,}/);
+          let added = false;
+          parts.forEach(p => {
+              let c = p.trim();
+              if(c && c.length > 0) { printQueue.push(c); added = true; }
+          });
+          if(added) {
+              codeInput.value = '';
+              saveQueue();
+              updateTableUI();
+              previewInCenter(printQueue[printQueue.length - 1]); // Preview da ultima adicionada
+          }
+        }
+      });
+
+      updateTableUI();
     };
 
-    // Switch de Abas
-    function openTab(id) {
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      event.currentTarget.classList.add('active');
-
-      if (id === 'tab-preview') {
-        container.classList.remove('no-print');
-        if(!localStorage.getItem('etiquetas_db_json')) alert('Atenção: Banco de Dados Mestre ainda não baixado! Vá na primeira aba!');
-      } else {
-        container.classList.add('no-print');
-        container.innerHTML = '';
-      }
-    }
-
-    // Rotina Dinâmica e Infalível para Google Sheets (Bypassa bloqueios locais via Script injection JSONP)
+    // FUNÇÕES NATIVAS: 1. DB SYNC (Motor Sheets via JSONP sem CORS)
     async function saveDB() {
       let url = elDbInput.value.trim();
       if(!url) return;
       
-      // Tenta extrair o ID oficial da planilha (funciona para links /d/.../edit e pubhtml)
-      const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
+      const match = url.match(/\\/d\\/([a-zA-Z0-9-_]+)/);
       if(!match || !match[1]) {
-         dbStatus.style.color = '#ef4444';
-         dbStatus.innerHTML = '❌ <b>Erro:</b> Link inválido. Pegue o link oficial em "Compartilhar > Copiar Link".';
+         dbStatus.style.color = 'var(--danger)';
+         dbStatus.innerHTML = '❌ <b>Erro:</b> URL inválida.';
          return;
       }
       
       const sheetId = match[1];
       localStorage.setItem('etiquetas_db_url', url);
       dbStatus.style.color = '#eab308';
-      dbStatus.innerText = 'Buscando planilha online no Google... aguarde.';
+      dbStatus.innerText = 'Sincronizando pelo Google...';
       
-      // Usando técnica JSONP que nunca é bloqueada por CORS de arquivos locais (file:///)
       const callbackName = 'gvizCallback_' + Date.now();
       const scriptUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tq=&tqx=out:json;responseHandler:${callbackName}`;
       
       window[callbackName] = function(json) {
          try {
-             // Limpeza após uso
              delete window[callbackName];
              const scr = document.getElementById(callbackName);
              if(scr) scr.remove();
              
-             // json.table.rows tem as linhas
-             if(!json || !json.table || !json.table.rows) throw new Error('Dados nulos');
+             if(!json || !json.table || !json.table.rows) throw new Error('Células vazias.');
              
-             // Salvamos o objeto mastigado no cache para gerar rápido as etiquetas
-             const dbObj = {};
+             let tempDb = {};
              json.table.rows.forEach(r => {
                  if(r.c && r.c[0] && r.c[0].v != null && r.c[0].v !== '') {
                      let cod = String(r.c[0].v).trim();
                      if (cod.toUpperCase() !== 'CODIGO' && cod.toUpperCase() !== 'COD') {
                          let prodStr = (r.c[1] && r.c[1].v) ? String(r.c[1].v).trim() : '';
                          let linkStr = (r.c[2] && r.c[2].v) ? String(r.c[2].v).trim() : '';
-                         dbObj[cod] = { prod: prodStr, link: linkStr };
+                         tempDb[cod] = { prod: prodStr, link: linkStr };
                      }
                  }
              });
              
-             localStorage.setItem('etiquetas_db_json', JSON.stringify(dbObj));
+             globalDB = tempDb;
+             localStorage.setItem('etiquetas_db_json', JSON.stringify(tempDb));
              
-             dbStatus.style.color = 'var(--secondary)';
-             dbStatus.innerText = '✅ Planilha Online sincronizada e pronta!';
-             showMsg('db-msg', 'Banco Local Atualizado ✔️');
+             dbStatus.style.color = 'var(--success)';
+             dbStatus.innerHTML = `✅ ${Object.keys(tempDb).length} lidos!`;
+             updateTableUI(); 
          } catch(e) {
              console.error(e);
-             dbStatus.style.color = '#ef4444';
-             dbStatus.innerHTML = '❌ <b>Erro Interno:</b> Formato da planilha inesperado. Coluna 1 precisa ser Código, Coluna 2 Descrição.';
+             dbStatus.style.color = 'var(--danger)';
+             dbStatus.innerHTML = '❌ <b>Formato Incorreto.</b>';
          }
       };
       
@@ -493,155 +674,156 @@
       script.id = callbackName;
       script.src = scriptUrl;
       script.onerror = function() {
-          dbStatus.style.color = '#ef4444';
-          dbStatus.innerHTML = '❌ <b>Erro Rede:</b> O seu Google Sheets não está "Aberto para Qualquer um com o link" poder ler.';
+          dbStatus.style.color = 'var(--danger)';
+          dbStatus.innerHTML = '❌ <b>Erro Privado:</b> Planilha fechada.';
       };
       document.body.appendChild(script);
     }
 
-    function saveSel() {
-      localStorage.setItem('etiquetas_sel', elSelInput.value);
-      showMsg('sel-msg', 'Lista de Códigos salva ✔️');
-    }
-
-    function saveCfg() {
-      localStorage.setItem('etiquetas_cfg_w', elCfgW.value);
-      localStorage.setItem('etiquetas_cfg_h', elCfgH.value);
-      localStorage.setItem('etiquetas_cfg_cols', elCfgCols.value);
-      applyCSSVars();
-      generateLabels();
-      showMsg('cfg-msg', 'Ajustes Aplicados ✔️');
-    }
-
-    // Notificações rápidas
-    function showMsg(id, txt) {
-      const m = document.getElementById(id);
-      m.innerText = txt;
-      setTimeout(() => m.innerText = '', 2500);
-    }
-
-    // Define Variaveis de CSS baseadas nos Inputs numéricos (CSS Variables)
+    // FUNÇÕES: 2. UI Configuration and View Sizes (Engine Milimétrica)
     function applyCSSVars() {
       const r = document.documentElement;
       const w = parseFloat(elCfgW.value) || 65;
       const h = parseFloat(elCfgH.value) || 30;
+      const cols = parseInt(elCfgCols.value) || 3;
       
       r.style.setProperty('--label-width', w + 'mm');
       r.style.setProperty('--label-height', h + 'mm');
-      r.style.setProperty('--grid-cols', elCfgCols.value);
+      r.style.setProperty('--grid-cols', cols);
       
-      // Auto-escala do QR Code e Fontes
-      // Altura da etiqueta menos padding superior e inferior (aprox 4mm)
       const qrSize = Math.max(10, h - 4);
       r.style.setProperty('--qr-size', qrSize + 'mm');
-      
-      // Fonte do código (ex: 12% da altura)
       r.style.setProperty('--font-code', Math.max(1.5, h * 0.12) + 'mm');
-      
-      // Fonte da descrição (ex: 8% da altura)
       r.style.setProperty('--font-prod', Math.max(1.2, h * 0.08) + 'mm');
+
+      localStorage.setItem('etiquetas_cfg_w', w);
+      localStorage.setItem('etiquetas_cfg_h', h);
+      localStorage.setItem('etiquetas_cfg_cols', cols);
+
+      renderPrintZone();
+      if(printQueue.length > 0) previewInCenter(printQueue[printQueue.length - 1]);
     }
 
-    function parseCSV(csv) {
-      let rows = [];
-      let row = [];
-      let cell = '';
-      let inQuotes = false;
-      
-      for (let i = 0; i < csv.length; i++) {
-        let char = csv[i];
+    // FUNÇÕES: 3. Gestão da Fila (Tabela Array Interativo)
+    function addSingleCode() {
+        const val = codeInput.value.trim();
+        if(!val) return;
+
+        let parts = val.split(/[\\n\\t,;]+|\\s{2,}/); 
+        parts.forEach(p => {
+            let clean = p.trim();
+            if(clean && clean.length > 0) printQueue.push(clean);
+        });
+
+        codeInput.value = '';
+        codeInput.focus();
+        saveQueue();
+        updateTableUI();
+
+        if(printQueue.length > 0) previewInCenter(printQueue[printQueue.length - 1]);
+    }
+
+    function removeRow(index) {
+        printQueue.splice(index, 1);
+        saveQueue();
+        updateTableUI();
+    }
+
+    function clearQueue() {
+        if(!confirm("Atenção: Apagar toda a lista de etiquetas geradas?")) return;
+        printQueue = [];
+        saveQueue();
+        updateTableUI();
+        previewContainer.innerHTML = '<div style="color:#94a3b8; font-size:0.9rem; text-align:center;">Lista Tabela Vazia.</div>';
+    }
+
+    function saveQueue() {
+        localStorage.setItem('etiquetas_fila', JSON.stringify(printQueue));
+    }
+
+    function updateTableUI() {
+        tableBody.innerHTML = '';
+        countBadge.innerText = printQueue.length.toString();
         
-        if (inQuotes) {
-          if (char === '"') {
-            if (i + 1 < csv.length && csv[i + 1] === '"') {
-              cell += '"';
-              i++;
-            } else {
-              inQuotes = false;
-            }
-          } else {
-            cell += char;
-          }
-        } else {
-          if (char === '"') {
-            inQuotes = true;
-          } else if (char === ',') { // Usando virgula natural do CSV Google Sheets Online
-            row.push(cell);
-            cell = '';
-          } else if (char === '\n') {
-            row.push(cell);
-            rows.push(row);
-            row = [];
-            cell = '';
-          } else if (char === '\r') {
-            // ignore
-          } else {
-            cell += char;
-          }
+        if (printQueue.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#9ca3af; padding: 30px;">Tabela Vazia. Informe o Código de Produto e gere.</td></tr>`;
+            renderPrintZone();
+            return;
         }
-      }
-      if (cell || row.length > 0) {
-        row.push(cell);
-        rows.push(row);
-      }
-      return rows;
+
+        printQueue.forEach((code, i) => {
+            const data = globalDB[code];
+            const nomeExibicao = data ? data.prod : `<span style="color:var(--danger)">CÓD. NÃO ACHADO</span>`;
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td><b>${code}</b></td>
+              <td style="line-height:1.2; font-size: 0.8rem;">${nomeExibicao}</td>
+              <td class="action-icons">
+                 <button class="icon-btn" onclick="previewInCenter('${code}')" title="Visualizar">👁️</button>
+                 <button class="icon-btn remove" onclick="removeRow(${i})" title="Remover Etiqueta">X</button>
+              </td>
+            `;
+            tableBody.appendChild(tr);
+        });
+
+        renderPrintZone();
+
+        const parentScroll = tableBody.parentElement;
+        parentScroll.scrollTop = parentScroll.scrollHeight; // rola tabelinha sempre pro ultimo
     }
 
-    // Motor Principal de Geração HTML de Etiquetas
-    function generateLabels() {
-      container.innerHTML = '';
-
-      // Trazendo o BD processado via JSONP
-      const jsonStr = localStorage.getItem('etiquetas_db_json');
-      let dbMap = {};
-      if(jsonStr) {
-          try {
-             dbMap = JSON.parse(jsonStr);
-          } catch(e) {}
-      }
-
-      // Tratando os itens selecionados para impressão pelo usuario
-      const selRaw = elSelInput.value.trim().split('\n');
-
-      selRaw.forEach(rawItem => {
-        const code = rawItem.trim();
-        if (!code) return; // ignora quebra de linhas vazias
-
-        const box = document.createElement('div');
-        box.className = 'label-box';
-
-        const data = dbMap[code];
-
-        // Encontrou o Produto
+    // FUNÇÕES: 4. GERAÇÃO ESTRUTURAL DA ETIQUETA HTML (Compartilhada entre Preview e Zona Printável)
+    function buildLabelHTML(code) {
+        const data = globalDB[code];
+        
         if (data) {
-          // Gerador Master: Usa a coluna LINK da sua planilha. Se estiver vazia, usa apenas o Código como Fallback.
-          let finalLink = data.link ? data.link : code; 
-
-          let qrImgUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(finalLink);
-          
-          box.innerHTML = `
-            <img src="${qrImgUrl}" alt="QR" onerror="this.src=''; this.alt='ERRO NO LINK'">
-            <div class="label-content">
-              <div class="code">${code}</div>
-              <div class="product">${data.prod}</div>
+           let finalLink = data.link ? data.link : code; 
+           let qrImgUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(finalLink);
+           return `
+            <div class="label-box">
+              <img src="${qrImgUrl}" alt="QR" onerror="this.src=''; this.alt='ERRO'">
+              <div class="label-content">
+                <div class="code">${code}</div>
+                <div class="product">${data.prod}</div>
+              </div>
             </div>
-          `;
-        } 
-        // Não encontrou Produto neste código
-        else {
-          box.classList.add('not-found');
-          box.innerHTML = `
-            <div style="font-size:32px; padding: 0 5px;">⚠️</div>
-            <div class="label-content">
-              <div class="code">${code}</div>
-              <div class="product">CÓDIGO NÃO<br>ENCONTRADO</div>
+           `;
+        } else {
+           return `
+            <div class="label-box not-found">
+              <div style="font-size:32px; padding: 0 5px;">⚠️</div>
+              <div class="label-content">
+                <div class="code">${code}</div>
+                <div class="product">SINCRO/ BD INCOMPLETO</div>
+              </div>
             </div>
-          `;
+           `;
         }
-        container.appendChild(box);
-      });
+    }
+
+    function previewInCenter(code) {
+        previewContainer.innerHTML = buildLabelHTML(code);
+    }
+
+    // A Zona de Impressão acumula as etiquetas que só aparecem no layout PDF milimético físico (Ctrl+P)
+    function renderPrintZone() {
+        printZone.innerHTML = '';
+        printQueue.forEach(code => {
+            printZone.insertAdjacentHTML('beforeend', buildLabelHTML(code));
+        });
+    }
+
+    function triggerPrint() {
+        if(printQueue.length === 0) {
+            alert("Sua lista/tabela está vazia! Não há o que imprimir.");
+            return;
+        }
+        if(Object.keys(globalDB).length === 0) {
+            alert("Atenção: O sistema identificou que você não apertou Sincronizar! A planilha está vazia.");
+        }
+        window.print();
     }
   </script>
 </body>
-
 </html>
