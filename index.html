@@ -19,9 +19,9 @@
       --primary-hover: #1d4ed8;
       --secondary: #10b981;
       --secondary-hover: #059669;
-      --text: #1f2937;
-      --text-light: #6b7280;
-      --border: #e5e7eb;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --border: #e2e8f0;
       --card-bg: #ffffff;
 
       /* Variáveis injetadas pelo Configuração do usuário */
@@ -32,84 +32,90 @@
 
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      /* Novo Fundo Hospitalar com Degradê (Azul Marinho/Cobalto) + Imagem */
-      background: linear-gradient(135deg, rgba(30, 58, 138, 0.85), rgba(37, 99, 235, 0.8)), 
-                  url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=2000&auto=format&fit=crop');
+      /* Novo Fundo Hospitalar Muito Claro e Limpo (Azul Gelo) + Imagem Hospitalar */
+      background: linear-gradient(135deg, rgba(224, 242, 254, 0.85), rgba(240, 248, 255, 0.95)), 
+                  url('https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=2000&auto=format&fit=crop');
       background-size: cover;
       background-attachment: fixed;
       background-position: center;
       
       color: var(--text);
       margin: 0;
-      padding: 30px;
+      padding: 40px 20px;
       transition: all 0.3s ease;
+      min-height: 100vh;
+    }
+
+    /* Container Principal Estilo Glassmorphism (Como na imagem) */
+    .glass-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 28px;
+      padding: 40px;
+      box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.15);
     }
 
     h1 {
-      color: #ffffff; /* Ajustado para branco para destacar contra o fundo escuro */
-      text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      color: #0f172a; /* Azul Marinho super escuro */
       text-align: center;
       font-weight: 800;
-      margin-bottom: 30px;
-      letter-spacing: -0.5px;
+      font-size: 2.4rem;
+      margin-bottom: 40px;
+      letter-spacing: -1px;
     }
 
-    /* Abas */
+    /* Abas - Estilo Pílula Oval Azul Claro */
     .tabs {
       display: flex;
       justify-content: center;
-      gap: 12px;
-      margin-bottom: 30px;
+      gap: 15px;
+      margin-bottom: 35px;
       flex-wrap: wrap;
     }
 
     .tab-btn {
-      padding: 12px 24px;
-      border: none;
-      background: var(--card-bg);
+      padding: 12px 26px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.65);
       cursor: pointer;
-      border-radius: 8px;
+      border-radius: 9999px; /* Pílula 100% arredondada */
       font-weight: 600;
-      font-size: 15px;
-      color: var(--text-light);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      font-size: 14px;
+      color: #0369a1; /* Texto azul royal claro */
       transition: all 0.2s ease;
     }
 
     .tab-btn.active {
-      background: var(--primary);
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      background: #bae6fd; /* Azul pastel vivo */
+      color: #082f49; /* Texto azul hiper escuro */
+      border-color: #7dd3fc;
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.2);
     }
 
     .tab-btn:hover:not(.active) {
       transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      color: var(--text);
+      background: rgba(255, 255, 255, 0.9);
+      color: #0284c7;
     }
 
-    /* Conteúdo das Abas */
+    /* Conteúdo das Abas - Fundo Branco Leite */
     .tab-content {
       display: none;
-      max-width: 800px;
-      margin: 0 auto;
-      background: var(--card-bg);
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      max-width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 35px;
+      border-radius: 20px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,1), 0 10px 20px rgba(0,0,0,0.03);
       animation: fadeIn 0.3s ease-out forwards;
     }
 
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .tab-content.active {
@@ -118,8 +124,9 @@
 
     h3 {
       margin-top: 0;
-      color: var(--text);
-      font-size: 1.5rem;
+      color: #0f172a;
+      font-size: 1.4rem;
+      margin-bottom: 15px;
     }
 
     p {
@@ -136,6 +143,7 @@
       font-size: 14px;
       border: 2px solid var(--border);
       border-radius: 12px;
+      background: #f8fafc;
       box-sizing: border-box;
       transition: border-color 0.2s;
       resize: vertical;
@@ -143,9 +151,7 @@
       line-height: 1.5;
     }
 
-    textarea:focus {
-      border-color: var(--primary);
-    }
+    textarea:focus { border-color: var(--primary); background: #fff; }
 
     .form-group {
       margin-bottom: 20px;
@@ -162,61 +168,60 @@
 
     input[type="url"], input[type="number"] {
       width: 100%;
-      padding: 12px;
+      padding: 14px;
       border: 2px solid var(--border);
-      border-radius: 8px;
-      font-size: 16px;
+      border-radius: 12px;
+      background: #f8fafc;
+      font-size: 15px;
       outline: none;
-      transition: border-color 0.2s;
+      transition: all 0.2s;
     }
 
-    input[type="number"] {
-      width: 120px;
-    }
+    input[type="number"] { width: 140px; }
 
     input[type="url"]:focus, input[type="number"]:focus {
       border-color: var(--primary);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
     }
 
-    /* Botões */
+    /* Botões - Completamente Arredondados */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 12px 24px;
-      background: var(--secondary);
+      padding: 14px 28px;
+      background: var(--secondary); /* Verde */
       color: #fff;
       border: none;
-      border-radius: 8px;
+      border-radius: 9999px; /* Oval */
       cursor: pointer;
       font-size: 16px;
       font-weight: 600;
       transition: all 0.2s ease;
       margin-top: 10px;
-      box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
+      box-shadow: 0 6px 14px rgba(16, 185, 129, 0.25);
     }
 
     .btn:hover {
       background: var(--secondary-hover);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(16, 185, 129, 0.35);
     }
 
-    .btn:active {
-      transform: translateY(1px);
-    }
+    .btn:active { transform: translateY(1px); }
 
     .btn-print {
-      background: #f59e0b;
+      background: var(--primary); /* Azul Forte */
       width: 100%;
       font-size: 18px;
-      padding: 16px;
-      box-shadow: 0 4px 6px rgba(245, 158, 11, 0.2);
+      padding: 18px;
+      box-shadow: 0 6px 14px rgba(37, 99, 235, 0.25);
     }
 
     .btn-print:hover {
-      background: #d97706;
-      box-shadow: 0 6px 12px rgba(245, 158, 11, 0.3);
+      background: var(--primary-hover);
+      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.35);
     }
 
     /* Área de Impressão */
@@ -226,10 +231,11 @@
       gap: 15px;
       justify-content: center;
       margin-top: 40px;
-      background: #fff; /* Adicionado um fundo branco provisório embaixo das etiquetas */
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(10px);
       padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     }
 
     .label-box {
@@ -293,7 +299,6 @@
       text-transform: uppercase;
     }
 
-    /* Estado de erro / Código não encontrado */
     .label-box.not-found {
       color: #ef4444;
       outline: 3px dashed #ef4444;
@@ -315,10 +320,10 @@
       #label-container {
         margin-top: 0;
         padding: 0;
-        background: transparent;
+        background: transparent !important;
         box-shadow: none;
+        backdrop-filter: none;
         gap: 1mm;
-        /* Espaçamento de 1mm para facilitar o corte na impressão */
         justify-content: start;
       }
 
@@ -339,7 +344,7 @@
 <body>
 
   <!-- Interface Gráfica -->
-  <div class="no-print">
+  <div class="no-print glass-container">
     <h1>Gerador de Etiquetas Inteligente</h1>
 
     <div class="tabs">
@@ -351,10 +356,10 @@
 
     <!-- DB TAB -->
     <div id="tab-db" class="tab-content active">
-      <h3>Banco de Dados de Produtos (Ligação Direta)</h3>
+      <h3>Sincronizar Dados</h3>
       <p>Cole abaixo o Link de Compartilhamento da sua planilha original. (Clique em Compartilhar > <b>"Qualquer pessoa com o link pode ler"</b> > Copiar Link).</p>
       <div class="form-group">
-        <label>Link de Compartilhamento do Google Sheets</label>
+        <label>Link de Compartilhamento (Google Sheets)</label>
         <input type="url" id="db-input" placeholder="https://docs.google.com/spreadsheets/d/1LhOrAMHTciuV.../edit">
       </div>
       <button class="btn" onclick="saveDB()">🔄 Sincronizar Agora</button>
@@ -364,12 +369,12 @@
 
     <!-- SELECTION TAB -->
     <div id="tab-sel" class="tab-content">
-      <h3>Códigos para Imprimir</h3>
+      <h3>Ações e Sincronização</h3>
       <p>Digite, bipe (com leitor de código de barras) ou cole todos os códigos dos produtos que deseja emitir em
         etiquetas. Colocar <b>um código por linha</b>.</p>
       <textarea id="sel-input" placeholder="1001&#10;1002&#10;1001"></textarea>
-      <button class="btn" onclick="saveSel()">💾 Salvar Códigos</button>
-      <span id="sel-msg" style="color:var(--secondary); font-weight:600; margin-left:15px;"></span>
+      <button class="btn" style="background:#2563eb;" onclick="saveSel()">💾 Salvar Códigos</button>
+      <span id="sel-msg" style="color:#2563eb; font-weight:600; margin-left:15px;"></span>
     </div>
 
     <!-- CONFIG TAB -->
@@ -384,12 +389,12 @@
         <input type="number" step="1" id="cfg-h" value="30">
       </div>
       <div class="form-group">
-        <label>Quantidade de Etiquetas na Linha (Colunas)</label>
+        <label>Quantidade de colunas na folha</label>
         <input type="number" id="cfg-cols" value="3">
       </div>
 
-      <button class="btn" onclick="saveCfg()">⚙️ Aplicar e Salvar Ajustes</button>
-      <span id="cfg-msg" style="color:var(--secondary); font-weight:600; margin-left:15px;"></span>
+      <button class="btn" style="background:#2563eb;" onclick="saveCfg()">⚙️ Aplicar e Salvar Ajustes</button>
+      <span id="cfg-msg" style="color:#2563eb; font-weight:600; margin-left:15px;"></span>
     </div>
 
     <!-- PREVIEW TAB -->
@@ -426,7 +431,7 @@
       
       // Se houver um link de base de dados já preenchido e cache, ele avisa
       if(localStorage.getItem('etiquetas_db_json')){
-         dbStatus.style.color = 'var(--secondary)';
+         dbStatus.style.color = '#10b981';
          dbStatus.innerText = '✅ Banco de Dados Mestre disponível nativamente.';
       }
       if(elDbInput.value.trim().length > 10) saveDB(); // atualiza em background
@@ -450,12 +455,12 @@
       }
     }
 
-    // Rotina Dinâmica e Infalível para Google Sheets (Bypassa bloqueios locais via Script injection JSONP)
+    // Rotina Dinâmica e Infalível para Google Sheets
     async function saveDB() {
       let url = elDbInput.value.trim();
       if(!url) return;
       
-      // Tenta extrair o ID oficial da planilha. OBS: Usando a Regex Corrigida!
+      // Tenta extrair o ID oficial da planilha
       const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
       if(!match || !match[1]) {
          dbStatus.style.color = '#ef4444';
@@ -465,7 +470,7 @@
       
       const sheetId = match[1];
       localStorage.setItem('etiquetas_db_url', url);
-      dbStatus.style.color = '#eab308';
+      dbStatus.style.color = '#f59e0b';
       dbStatus.innerText = 'Buscando planilha online no Google... aguarde.';
       
       // Usando técnica JSONP que nunca é bloqueada
@@ -479,10 +484,8 @@
              const scr = document.getElementById(callbackName);
              if(scr) scr.remove();
              
-             // json.table.rows tem as linhas
              if(!json || !json.table || !json.table.rows) throw new Error('Dados nulos');
              
-             // Salvamos o objeto mastigado no cache para gerar rápido as etiquetas
              const dbObj = {};
              json.table.rows.forEach(r => {
                  if(r.c && r.c[0] && r.c[0].v != null && r.c[0].v !== '') {
@@ -497,7 +500,7 @@
              
              localStorage.setItem('etiquetas_db_json', JSON.stringify(dbObj));
              
-             dbStatus.style.color = 'var(--secondary)';
+             dbStatus.style.color = '#10b981';
              dbStatus.innerText = '✅ Planilha Online sincronizada e pronta!';
              showMsg('db-msg', 'Banco Local Atualizado ✔️');
          } catch(e) {
@@ -531,14 +534,12 @@
       showMsg('cfg-msg', 'Ajustes Aplicados ✔️');
     }
 
-    // Notificações rápidas
     function showMsg(id, txt) {
       const m = document.getElementById(id);
       m.innerText = txt;
       setTimeout(() => m.innerText = '', 2500);
     }
 
-    // Define Variaveis de CSS baseadas nos Inputs numéricos (CSS Variables)
     function applyCSSVars() {
       const r = document.documentElement;
       const w = parseFloat(elCfgW.value) || 65;
@@ -554,32 +555,26 @@
       r.style.setProperty('--font-prod', Math.max(1.2, h * 0.08) + 'mm');
     }
 
-    // Motor Principal de Geração HTML de Etiquetas
     function generateLabels() {
       container.innerHTML = '';
 
-      // Trazendo o BD processado via JSONP
       const jsonStr = localStorage.getItem('etiquetas_db_json');
       let dbMap = {};
       if(jsonStr) {
-          try {
-             dbMap = JSON.parse(jsonStr);
-          } catch(e) {}
+          try { dbMap = JSON.parse(jsonStr); } catch(e) {}
       }
 
-      // Tratando os itens selecionados para impressão pelo usuario
       const selRaw = elSelInput.value.trim().split('\\n');
 
       selRaw.forEach(rawItem => {
         const code = rawItem.trim();
-        if (!code) return; // ignora quebra de linhas vazias
+        if (!code) return;
 
         const box = document.createElement('div');
         box.className = 'label-box';
 
         const data = dbMap[code];
 
-        // Encontrou o Produto
         if (data) {
           let finalLink = data.link ? data.link : code; 
           let qrImgUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(finalLink);
@@ -591,9 +586,7 @@
               <div class="product">${data.prod}</div>
             </div>
           `;
-        } 
-        // Não encontrou Produto neste código
-        else {
+        } else {
           box.classList.add('not-found');
           box.innerHTML = `
             <div style="font-size:32px; padding: 0 5px;">⚠️</div>
