@@ -438,7 +438,7 @@
       if(!url) return;
       
       // Tenta extrair o ID oficial da planilha (funciona para links /d/.../edit e pubhtml)
-      const match = url.match(/\\/d\\/([a-zA-Z0-9-_]+)/);
+      const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
       if(!match || !match[1]) {
          dbStatus.style.color = '#ef4444';
          dbStatus.innerHTML = '❌ <b>Erro:</b> Link inválido. Pegue o link oficial em "Compartilhar > Copiar Link".';
