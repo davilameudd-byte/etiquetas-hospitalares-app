@@ -564,7 +564,7 @@
           try { dbMap = JSON.parse(jsonStr); } catch(e) {}
       }
 
-      const selRaw = elSelInput.value.trim().split('\\n');
+      const selRaw = elSelInput.value.split(/\r?\n/);
 
       selRaw.forEach(rawItem => {
         const code = rawItem.trim();
